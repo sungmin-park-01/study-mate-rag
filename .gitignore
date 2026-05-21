@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment variables
+.env
+.env.local
+
+# Node / React
+node_modules/
+dist/
+build/
+
+# OS files
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Chroma local DB
+chroma/
+chroma_db/
+
+# Logs
+*.log
