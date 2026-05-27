@@ -1,7 +1,17 @@
 from fastapi import FastAPI
 
-from app.api.health import router as health_router
+from app.api.documents import router as documents_router
 
-app = FastAPI(title="Study Mate RAG API")
+app = FastAPI(
+    title="Study Mate RAG API",
+    description="A RAG-based AI assistant for course documents.",
+    version="0.1.0"
+)
 
-app.include_router(health_router)
+
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
+
+app.include_router(documents_router)
