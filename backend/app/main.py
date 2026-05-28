@@ -9,6 +9,15 @@ app = FastAPI(
 )
 
 
+@app.get("/")
+def root():
+    return {
+        "message": "Study Mate RAG API is running.",
+        "docs": "/docs",
+        "health": "/health"
+    }
+
+
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
