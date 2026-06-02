@@ -4,6 +4,7 @@ from app.core.config import MAX_UPLOAD_SIZE_BYTES, ALLOWED_PDF_CONTENT_TYPES
 from app.services.document_service import create_document_id
 from app.services.pdf_service import extract_text_by_page
 from app.services.chunk_service import chunk_pages
+from app.services.vector_store_service import VectorStoreService
 
 router = APIRouter(
     prefix="/documents",
@@ -64,13 +65,22 @@ async def upload_document(file: UploadFile = File(...)):
     # 9. Convert extracted pages into chunks.
     chunks = chunk_pages(document_id=document_id, pages=pages)
 
-    # 10. Return the upload and processing result.
+    # 10. Store chunks in the vector database for later retrieval.
+    vector_store_service = VectorStoreService()
+    stored_chunk_count = vector_store_service.add_chunks(
+        document_id=document_id,
+        filename=file.filename,
+        chunks=chunks
+    )
+
+    # 11. Return the upload and processing result.
     return {
         "document_id": document_id,
         "filename": file.filename,
-        "status": "uploaded",
+        "status": "processed",
         "page_count": len(pages),
         "chunk_count": len(chunks),
+        "stored_chunk_count": stored_chunk_count,
         "pages": pages,
         "chunks": chunks
     }
